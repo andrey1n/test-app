@@ -1,16 +1,20 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { RootState } from '../store';
 import { setCurrentPage } from '../store/slices/questions/questions.slice';
 
 const QuestionsPagination: React.FC = () => {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const currentPage = useSelector((state: RootState) => state.questions.currentPage);
   const itemsPerPage = useSelector((state: RootState) => state.questions.itemsPerPage);
   const questions = useSelector((state: RootState) => state.questions.questions);
 
   const handlePageChange = (page: number) => {
     dispatch(setCurrentPage(page));
+    setSearchParams({ query: searchParams.get('query') || '', page: page.toString() });
   };
 
   const showPagination = questions.length > itemsPerPage;

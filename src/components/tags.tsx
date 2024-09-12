@@ -15,7 +15,7 @@ const Tags: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="mb-10 mt-7">Click tags and start expore!</h1>
+      <h1 className="mb-10 mt-7">Click tags and start exploring!</h1>
       {isLoading && <p>Loading tags...</p>}
       {isError && <p className="text-red-500">Failed to load tags</p>}
 
