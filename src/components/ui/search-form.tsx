@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { RootState, AppDispatch } from '../store';
-import { setQuery, setCurrentPage } from '../store/slices/questions/questions.slice';
-import { useSearchQuestionsQuery } from '../utils/api';
-import useDebouncedValue from '../hooks/use-debounce';
+import { RootState, AppDispatch } from '../../store/index';
+import { setQuery, setCurrentPage } from '../../store/slices/questions/questions.slice';
+import { useSearchQuestionsQuery } from '../../utils/api';
+import useDebouncedValue from '../../hooks/use-debounce';
 
 const SearchForm: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -19,7 +19,6 @@ const SearchForm: React.FC = () => {
   const [inputValue, setInputValue] = useState(searchParams.get('query') || query);
   const debouncedQuery = useDebouncedValue(inputValue, 500);
 
-  
   useEffect(() => {
     const queryParam = searchParams.get('query') || '';
     if (queryParam !== inputValue) {
@@ -27,8 +26,6 @@ const SearchForm: React.FC = () => {
       dispatch(setQuery(queryParam));
     }
   }, [searchParams, dispatch]);
-
-
 
   useEffect(() => {
     dispatch(setQuery(debouncedQuery));

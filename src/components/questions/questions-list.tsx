@@ -1,24 +1,30 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { useSearchQuestionsQuery } from '../utils/api';
-import { StackOverflowQuestion } from '../types';
+import { RootState } from '../../store';
+import { useSearchQuestionsQuery } from '../../utils/api';
+import { StackOverflowQuestion } from '../../types';
 import QuestionsFilter from './questions-filter';
 import QuestionsPagination from './questions-pagination';
-import { formatDate, sortQuestions, paginateQuestions } from '../store/slices/questions/helper';
-import { setQuery, setCurrentPage, setSortOrder } from '../store/slices/questions/questions.slice';
-import { useSearchParams } from 'react-router-dom';
+import {
+  setQuery,
+  setCurrentPage,
+  setSortOrder,
+  setQuestions,
+  selectSortedAndPaginatedQuestions,
+  formatDate,
+} from '../../store/slices/questions/questions.slice';
+import { useSearchParams, Link } from 'react-router-dom';
 
 const QuestionsList: React.FC = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPage = useSelector((state: RootState) => state.questions.currentPage);
-  const itemsPerPage = useSelector((state: RootState) => state.questions.itemsPerPage);
   const query = useSelector((state: RootState) => state.questions.query);
   const sortOrder = useSelector((state: RootState) => state.questions.sortOrder);
+  const questions = useSelector(selectSortedAndPaginatedQuestions);
 
-  const { data: questions = [], isLoading, isError } = useSearchQuestionsQuery(query);
+  const { data: fetchedQuestions = [], isLoading, isError } = useSearchQuestionsQuery(query);
 
   useEffect(() => {
     const queryParam = searchParams.get('query') || '';
@@ -31,15 +37,18 @@ const QuestionsList: React.FC = () => {
   }, [searchParams, dispatch]);
 
   useEffect(() => {
+    if (fetchedQuestions.length > 0) {
+      dispatch(setQuestions(fetchedQuestions));
+    }
+  }, [fetchedQuestions, dispatch]);
+
+  useEffect(() => {
     setSearchParams({
       query: query,
       sortOrder: sortOrder,
       page: currentPage.toString(),
     });
   }, [query, sortOrder, currentPage, setSearchParams]);
-
-  const sortedQuestions = sortQuestions(questions, sortOrder);
-  const currentQuestions = paginateQuestions(sortedQuestions, currentPage, itemsPerPage);
 
   return (
     <div className="mt-10 mb-10">
@@ -56,13 +65,18 @@ const QuestionsList: React.FC = () => {
             role="list"
             className="table w-full border-collapse border border-gray-300 rounded-md"
           >
-            {currentQuestions.map((element: StackOverflowQuestion) => (
+            {questions.map((element: StackOverflowQuestion) => (
               <li key={element.question_id} className="table-row hover:bg-gray-50">
                 <div className="table-cell p-4 border border-gray-300 align-top w-3/5">
                   <p className="text-base font-semibold text-blue-600 hover:underline">
-                    <a href={element.link} target="_blank" rel="noopener noreferrer">
+                    <Link
+                      to={{
+                        pathname: `/questions/${element.question_id}`,
+                        search: searchParams.toString(),
+                      }}
+                    >
                       {element.title}
-                    </a>
+                    </Link>
                   </p>
                   <div className="mt-2 text-sm text-gray-500 space-x-3">
                     <span className="bg-green-500 text-white px-2 py-1 rounded">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { setSortOrder } from '../store/slices/questions/questions.slice';
+import { RootState } from '../../store/index';
+import { setSortOrder } from '../../store/slices/questions/questions.slice';
 
 const QuestionsFilter: React.FC = () => {
   const dispatch = useDispatch();

@@ -9,9 +9,18 @@ export interface StackOverflowUser {
   link: string;
 }
 
+export interface StackOverflowAnswer {
+  answer_id: number;
+  body: string;
+  score: number;
+  is_accepted: boolean;
+  owner: StackOverflowUser;
+}
+
 export interface StackOverflowQuestion {
   tags: string[];
   owner: StackOverflowUser;
+  body: string;
   is_answered: boolean;
   view_count: number;
   answer_count: number;
@@ -23,6 +32,7 @@ export interface StackOverflowQuestion {
   link: string;
   closed_reason?: string;
   title: string;
+  answers?: StackOverflowAnswer[];
 }
 
 export interface QuestionsState {

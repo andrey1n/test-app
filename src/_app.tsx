@@ -1,7 +1,7 @@
 import React from 'react';
-import QuestionsList from './components/questions-list';
-import Tags from './components/tags';
-import Navbar from './components/navbar';
+import QuestionsList from './components/questions/questions-list';
+import Tags from './components/tags/tags';
+import Navbar from './components/ui/navbar';
 
 const App: React.FC = () => {
   return (

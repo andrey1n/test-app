@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setQuery, setCurrentPage } from '../store/slices/questions/questions.slice';
-import { useFetchTagsQuery } from '../utils/api';
+import { setQuery, setCurrentPage } from '../../store/slices/questions/questions.slice';
+import { useFetchTagsQuery } from '../../utils/api';
 
 const Tags: React.FC = () => {
   const dispatch = useDispatch();
